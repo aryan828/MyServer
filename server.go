@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -24,7 +25,12 @@ func redirect(w http.ResponseWriter, req *http.Request) {
 }
 
 func handleBase(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Hello Brozees")
+	if r.Host == "logs.aayush.ninja" {
+		logFile, _ := ioutil.ReadFile(logger.LogFile)
+		fmt.Fprint(w, string(logFile))
+	} else {
+		fmt.Fprintln(w, r.Host)
+	}
 	logs.Println(r.RemoteAddr)
 }
 
